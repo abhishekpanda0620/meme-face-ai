@@ -1,103 +1,26 @@
 "use client";
 
 import React, { useEffect, useRef } from "react";
-import type { Results } from "@mediapipe/face_mesh";
+import { useFaceTracker, EmotionState } from "@/hooks/useFaceTracker";
 
-export default function FaceScanner() {
+interface FaceScannerProps {
+  onEmotionChange?: (emotion: EmotionState) => void;
+}
+
+export default function FaceScanner({ onEmotionChange }: FaceScannerProps) {
   const videoRef = useRef<HTMLVideoElement>(null);
   const canvasRef = useRef<HTMLCanvasElement>(null);
 
+  const { isReady, stableEmotion } = useFaceTracker(videoRef, canvasRef);
+
   useEffect(() => {
-    if (!videoRef.current || !canvasRef.current) return;
-
-    const videoElement = videoRef.current;
-    const canvasElement = canvasRef.current;
-    const canvasCtx = canvasElement.getContext("2d");
-
-    // MediaPipe defines these on the global window object via CDN scripts in layout.tsx
-    const FaceMesh = (window as any).FaceMesh;
-    const Camera = (window as any).Camera;
-
-    if (!FaceMesh || !Camera) {
-      console.error("MediaPipe not loaded from CDN yet.");
-      return;
+    if (onEmotionChange) {
+      onEmotionChange(stableEmotion);
     }
-
-    // Initialize FaceMesh
-    const faceMesh = new FaceMesh({
-      locateFile: (file: string) => {
-        return `https://cdn.jsdelivr.net/npm/@mediapipe/face_mesh/${file}`;
-      },
-    });
-
-    faceMesh.setOptions({
-      maxNumFaces: 1,
-      refineLandmarks: true, // 468 points + irises
-      minDetectionConfidence: 0.5,
-      minTrackingConfidence: 0.5,
-    });
-
-    faceMesh.onResults((results: Results) => {
-      if (!canvasCtx || !videoElement.videoWidth || !videoElement.videoHeight) return;
-
-      // Sync canvas dimensions to video feed exactly once video is ready
-      if (canvasElement.width !== videoElement.videoWidth) {
-        canvasElement.width = videoElement.videoWidth;
-        canvasElement.height = videoElement.videoHeight;
-      }
-
-      canvasCtx.save();
-      canvasCtx.clearRect(0, 0, canvasElement.width, canvasElement.height);
-
-      // Flip context horizontally here if we want mirror effect, OR handle it via CSS.
-      // We'll draw normally and flip via CSS to save computation points.
-      canvasCtx.drawImage(
-        results.image,
-        0,
-        0,
-        canvasElement.width,
-        canvasElement.height
-      );
-
-      // Draw the 468 face mesh points
-      if (results.multiFaceLandmarks) {
-        for (const landmarks of results.multiFaceLandmarks) {
-          canvasCtx.fillStyle = "#10b981"; // Emerald-500 for a premium look
-          for (const landmark of landmarks) {
-            const x = landmark.x * canvasElement.width;
-            const y = landmark.y * canvasElement.height;
-            canvasCtx.beginPath();
-            canvasCtx.arc(x, y, 1.2, 0, 2 * Math.PI);
-            canvasCtx.fill();
-          }
-        }
-      }
-      canvasCtx.restore();
-    });
-
-    // Setup Video Feed using MediaPipe Camera Utility
-    const camera = new Camera(videoElement, {
-      onFrame: async () => {
-        try {
-          await faceMesh.send({ image: videoElement });
-        } catch (error) {
-          console.error("Error processing Face Mesh frame:", error);
-        }
-      },
-      width: 1280, // Request HD for better accuracy
-      height: 720,
-    });
-    
-    camera.start();
-
-    return () => {
-      camera.stop();
-      faceMesh.close();
-    };
-  }, []);
+  }, [stableEmotion, onEmotionChange]);
 
   return (
-    <div className="relative w-full max-w-4xl mx-auto rounded-xl overflow-hidden shadow-2xl border border-gray-800/50 bg-black/20 backdrop-blur-sm p-4">
+    <div className="relative w-full max-w-4xl mx-auto rounded-xl overflow-hidden shadow-2xl border border-neutral-200 dark:border-neutral-800 bg-black/5 backdrop-blur-sm p-4">
       {/* Hidden Video element - MediaPipe requires a source HTMLVideoElement */}
       <video
         ref={videoRef}
@@ -106,7 +29,15 @@ export default function FaceScanner() {
       ></video>
       
       {/* Canvas container with an explicit aspect ratio and CSS horizontal flip for mirror effect */}
-      <div className="relative w-full overflow-hidden rounded-lg bg-black flex items-center justify-center min-h-[400px]">
+      <div className="relative w-full overflow-hidden rounded-lg bg-neutral-900 flex items-center justify-center min-h-[400px]">
+        {/* Loading State */}
+        {!isReady && (
+          <div className="absolute inset-0 flex flex-col items-center justify-center text-white z-10 bg-neutral-900/80 backdrop-blur-sm">
+             <div className="w-8 h-8 border-4 border-orange-500 border-t-transparent rounded-full animate-spin mb-4"></div>
+             <p className="font-medium animate-pulse">Initializing Neural Engine...</p>
+          </div>
+        )}
+
         <canvas
           ref={canvasRef}
           className="w-full h-auto object-cover transform scale-x-[-1]"
@@ -114,11 +45,21 @@ export default function FaceScanner() {
 
         {/* Overlay Badges for premium UI look */}
         <div className="absolute top-4 left-4 flex gap-3">
-          <div className="flex items-center gap-2 bg-black/60 text-emerald-400 font-semibold px-4 py-2 rounded-full text-xs backdrop-blur-md border border-emerald-500/30">
-            <span className="w-2 h-2 rounded-full bg-emerald-500 animate-pulse"></span>
-            Vision Active
+          <div className={`flex items-center gap-2 text-white font-semibold px-4 py-2 rounded-full text-xs backdrop-blur-md border transition-all ${isReady ? 'bg-orange-500/80 border-orange-400' : 'bg-neutral-800/80 border-neutral-600'}`}>
+            <span className={`w-2 h-2 rounded-full ${isReady ? 'bg-white animate-pulse' : 'bg-neutral-400'}`}></span>
+            {isReady ? 'Scanner Active' : 'Booting...'}
           </div>
         </div>
+        
+        
+        {/* Emotion Display Badge (Testing) */}
+        {isReady && (
+          <div className="absolute bottom-4 right-4 flex gap-3">
+            <div className="flex items-center gap-2 bg-neutral-900/90 text-white font-black px-6 py-3 rounded-xl text-sm border-2 border-orange-500 shadow-[0_0_15px_rgba(249,115,22,0.3)]">
+              Mood: {stableEmotion}
+            </div>
+          </div>
+        )}
       </div>
     </div>
   );
