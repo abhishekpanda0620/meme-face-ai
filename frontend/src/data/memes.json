@@ -1,0 +1,50 @@
+[
+  {
+    "id": "meme_angry_nana",
+    "triggerEmotion": "ANGRY",
+    "source": "Welcome",
+    "imageUrl": "/memes/meme_angry.png",
+    "textPrimary": "Control Uday, Control!",
+    "tags": ["bollywood", "angry", "nana_patekar"]
+  },
+  {
+    "id": "meme_shocked_3idiots",
+    "triggerEmotion": "SHOCKED",
+    "source": "3 Idiots",
+    "imageUrl": "/memes/meme_shocked.png",
+    "textPrimary": "Kehna kya chahte ho?",
+    "tags": ["bollywood", "shocked", "aamir_khan"]
+  },
+  {
+    "id": "meme_sad_mirzapur",
+    "triggerEmotion": "SAD",
+    "source": "Mirzapur",
+    "imageUrl": "/memes/meme_sad.png",
+    "textPrimary": "Bohot takleef hoti hai...",
+    "tags": ["webseries", "sad", "guddu_bhaiya"]
+  },
+  {
+    "id": "meme_joy_herapheri",
+    "triggerEmotion": "JOY",
+    "source": "Hera Pheri",
+    "imageUrl": "/memes/meme_joy.png",
+    "textPrimary": "Paisa hi paisa hoga!",
+    "tags": ["bollywood", "joy", "akshay_kumar"]
+  },
+  {
+    "id": "meme_judging_hera_pheri",
+    "triggerEmotion": "JUDGING",
+    "source": "Hera Pheri",
+    "imageUrl": "/memes/meme_judging.png",
+    "textPrimary": "Yeh Baburao ka syle hai!",
+    "tags": ["bollywood", "judging", "baburao"]
+  },
+  {
+    "id": "meme_neutral_default",
+    "triggerEmotion": "NEUTRAL",
+    "source": "Gangs of Wasseypur",
+    "imageUrl": "/memes/meme_neutral.png",
+    "textPrimary": "Roz utho, naha dho ke...",
+    "tags": ["bollywood", "neutral"]
+  }
+]
