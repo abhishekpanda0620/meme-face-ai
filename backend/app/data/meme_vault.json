@@ -1,0 +1,56 @@
+[
+  {
+    "id": "meme_angry_nana",
+    "emotion": "ANGRY",
+    "intents": ["traffic_rage", "wifi_down", "political_rant", "sibling_fight"],
+    "source": "Welcome",
+    "character": "Nana Patekar",
+    "imageUrl": "/memes/meme_angry.png",
+    "default_caption": "Control Uday, Control!"
+  },
+  {
+    "id": "meme_shocked_3idiots",
+    "emotion": "SHOCKED",
+    "intents": ["plot_twist", "bill_shock", "gossip_bomb", "exam_result"],
+    "source": "3 Idiots",
+    "character": "Aamir Khan",
+    "imageUrl": "/memes/meme_shocked.png",
+    "default_caption": "Kehna kya chahte ho?"
+  },
+  {
+    "id": "meme_sad_mirzapur",
+    "emotion": "SAD",
+    "intents": ["heartbreak", "monday_blues", "exam_fail", "emotional_scene"],
+    "source": "Mirzapur",
+    "character": "Guddu Bhaiya",
+    "imageUrl": "/memes/meme_sad.png",
+    "default_caption": "Bohot takleef hoti hai..."
+  },
+  {
+    "id": "meme_joy_herapheri",
+    "emotion": "JOY",
+    "intents": ["celebration", "paisa_flex", "reunion", "foodie_joy"],
+    "source": "Phir Hera Pheri",
+    "character": "Akshay Kumar (Raju)",
+    "imageUrl": "/memes/meme_joy.png",
+    "default_caption": "Paisa hi paisa hoga!"
+  },
+  {
+    "id": "meme_judging_hera_pheri",
+    "emotion": "JUDGING",
+    "intents": ["side_eye", "disapproval", "sus_look"],
+    "source": "Hera Pheri",
+    "character": "Baburao",
+    "imageUrl": "/memes/meme_judging.png",
+    "default_caption": "Yeh Baburao ka style hai!"
+  },
+  {
+    "id": "meme_neutral_default",
+    "emotion": "NEUTRAL",
+    "intents": ["unbothered", "monday_mood", "waiting"],
+    "source": "Gangs of Wasseypur",
+    "character": "Faizal Khan",
+    "imageUrl": "/memes/meme_neutral.png",
+    "default_caption": "Roz utho, naha dho ke..."
+  }
+]

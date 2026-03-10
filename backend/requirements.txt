@@ -1,0 +1,15 @@
+fastapi==0.115.0
+uvicorn[standard]==0.30.0
+python-dotenv==1.0.1
+pydantic==2.9.0
+
+# Vision Pipeline
+deepface==0.0.93
+tf-keras==2.16.0
+opencv-python-headless==4.10.0.84
+pillow==10.4.0
+
+# NLP Pipeline
+transformers==4.44.0
+torch==2.4.0
+sentencepiece==0.2.0
