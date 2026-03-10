@@ -12,6 +12,7 @@ from fastapi.middleware.cors import CORSMiddleware
 from dotenv import load_dotenv
 
 from app.routers.caption import router as caption_router
+from app.routers.caption_only import router as caption_only_router
 from app.models.schemas import HealthResponse
 from app.nlp.caption_generator import load_model, is_model_loaded
 
@@ -53,6 +54,7 @@ app.add_middleware(
 
 # Mount routes
 app.include_router(caption_router)
+app.include_router(caption_only_router)
 
 
 @app.get("/health", response_model=HealthResponse)

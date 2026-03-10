@@ -2,7 +2,7 @@
 Pydantic request/response models for the MemeFace AI API.
 """
 from pydantic import BaseModel, Field
-from typing import Optional
+from typing import Literal, Optional
 
 
 class AnalyzeRequest(BaseModel):
@@ -18,6 +18,22 @@ class AnalyzeResponse(BaseModel):
     emotion: str = Field(..., description="Detected emotion (JOY, SAD, ANGRY, etc.)")
     confidence: float = Field(..., description="Confidence score from the classifier (0-1)")
     intent: str = Field(..., description="Richer intent label for NLP context")
+    caption: str = Field(..., description="AI-generated Hindi/Hinglish meme caption")
+    meme_id: str = Field(..., description="ID of the matched meme template")
+
+
+class CaptionRequest(BaseModel):
+    """Request body for the lightweight /api/caption endpoint."""
+    emotion: str = Field(
+        ...,
+        description="Client-side detected emotion (JOY, SAD, ANGRY, SHOCKED, JUDGING, NEUTRAL)"
+    )
+
+
+class CaptionResponse(BaseModel):
+    """Response body from the /api/caption endpoint."""
+    emotion: str = Field(..., description="Echoed emotion from request")
+    intent: str = Field(..., description="Mapped cultural intent")
     caption: str = Field(..., description="AI-generated Hindi/Hinglish meme caption")
     meme_id: str = Field(..., description="ID of the matched meme template")
 

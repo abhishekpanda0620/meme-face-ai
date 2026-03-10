@@ -1,19 +1,27 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useCallback, useRef } from "react";
 import FaceScanner from "@/components/FaceScanner";
 import MemeImage from "@/components/MemeImage";
+import SnapShareButton from "@/components/SnapShareButton";
 import { ThemeToggle } from "@/components/ThemeToggle";
 import type { EmotionState } from "@/hooks/useFaceTracker";
 import Image from "next/image";
 
 export default function Home() {
   const [activeEmotion, setActiveEmotion] = useState<EmotionState>("NEUTRAL");
+  const [currentCaption, setCurrentCaption] = useState<string>("");
+
+  /** Callback from MemeImage when a new caption is fetched/set */
+  const handleCaptionChange = useCallback((caption: string) => {
+    setCurrentCaption(caption);
+  }, []);
+
   return (
     <main className="min-h-screen bg-neutral-50 dark:bg-neutral-950 text-neutral-900 dark:text-neutral-50 selection:bg-orange-500/30 font-sans transition-colors duration-300">
       
       {/* Minimal Header */}
-      <header className="w-full py-6 px-4 sm:px-8 flex justify-between items-center bg-white/80 dark:bg-neutral-950/80 backdrop-blur-md sticky top-0 z-50 border-b border-neutral-200 dark:border-neutral-800 transition-colors duration-300">
+      <header className="w-full py-5 px-4 sm:px-8 flex justify-between items-center bg-white/80 dark:bg-neutral-950/80 backdrop-blur-md sticky top-0 z-50 border-b border-neutral-200 dark:border-neutral-800 transition-colors duration-300">
         <div className="flex items-center gap-3">
           <Image src="/logo.png" alt="MemeFace Logo" width={32} height={32} className="rounded-lg shadow-sm" />
           <h1 className="text-2xl font-black tracking-tighter text-neutral-900 dark:text-white">
@@ -70,7 +78,18 @@ export default function Home() {
             </div>
             
             <div className="relative h-full min-h-[400px] w-full rounded-2xl overflow-hidden border-4 border-neutral-200 dark:border-neutral-800 shadow-2xl bg-neutral-100 dark:bg-neutral-900">
-               <MemeImage emotion={activeEmotion} />
+               <MemeImage
+                 emotion={activeEmotion}
+                 onCaptionChange={handleCaptionChange}
+               />
+            </div>
+
+            {/* Snap & Share CTA */}
+            <div className="flex justify-center">
+              <SnapShareButton
+                emotion={activeEmotion}
+                caption={currentCaption}
+              />
             </div>
           </div>
 
