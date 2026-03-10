@@ -29,9 +29,15 @@
 
 ### B. Performance & Architecture
 - **Zero-Latency Vision**: Optimize MediaPipe to run cleanly on the client side. Handle the video stream and frame processing efficiently to avoid freezing the browser.
-- **Decoupled Logic**: Separate the Face Mesh detection loop from the React UI rendering tree to prevent unnecessary high-frequency re-renders.
-- **Modular Components**: Build isolated, reusable React components (e.g., `CameraFeed`, `MemeOverlay`, `SnapButton`).
-- **Responsive & Premium Design**: The UI must look slick and premium, utilizing TailwindCSS for smooth layouts and micro-animations for the "Snap & Share" features.
+- **Decoupled Logic**: Separate the Face Mesh detection loop from the React UI rendering tree to prevent unnecessary high-frequency re-renders. Use `requestAnimationFrame` for vision loops.
+- **Responsive & Premium Design**: The UI must look slick and premium, utilizing Tailwind CSS for smooth layouts, dark/light modes, and micro-animations.
+
+### C. Maintainability & Modular Structure
+- **Separation of Concerns (Frontend vs Backend)**: The codebase is strictly split into `frontend/` (Next.js App) and `backend/` (if an API/Python engine is required).
+- **Modular React Architecture**: Never build monolithic, single-file pages. Break down UI into highly reusable, isolated components inside `frontend/src/components/` (e.g., `CameraFeed`, `MemeOverlay`, `ThemeToggle`).
+- **Custom Hooks for Logic**: Extract complex state and effect management (like MediaPipe initialization and tracking coordination) into custom hooks inside `frontend/src/hooks/` to keep component files clean and readable.
+- **Utility Functions**: Place pure logic, constants, and helper functions in `frontend/src/lib/` or `frontend/src/utils/`.
+- **Readability Over Cleverness**: Write code that is easy for humans to read. Comment why complex decisions were made, not what the code is doing.
 
 ## 5. Workflow & Task Alignment
 Whenever you are given a new task, ensure it aligns with the defined project phases in `ROADMAP.md`:
